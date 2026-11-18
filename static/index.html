@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DarGlobal &amp; Wasalt — AI Real Estate Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Mobile backdrop -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-lockup">
+          <div class="brand-mark">DW</div>
+          <div>
+            <h1 class="brand-title">DarGlobal &times; Wasalt</h1>
+            <p class="brand-subtitle">AI Real Estate Concierge</p>
+          </div>
+        </div>
+        <button id="closeSidebarBtn" class="icon-btn mobile-only" aria-label="Close sidebar">&times;</button>
+      </div>
+
+      <button id="newChatBtn" class="btn-primary full-width">
+        <span>+</span> New Conversation
+      </button>
+
+      <div class="sidebar-section">
+        <label class="section-label">Knowledge Scope</label>
+        <div class="source-tabs" role="group" aria-label="Filter knowledge source">
+          <button class="source-tab active" data-source="all">All</button>
+          <button class="source-tab" data-source="darglobal">DarGlobal</button>
+          <button class="source-tab" data-source="wasalt">Wasalt</button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <label for="modelSelect" class="section-label">OpenRouter Free Model</label>
+        <select id="modelSelect" class="select-input">
+          <option value="openrouter/free">OpenRouter Free (Auto-Router)</option>
+        </select>
+        <p class="helper-text">Auto-fallbacks across active <code>:free</code> models if rate-limited.</p>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="section-label-row">
+          <span class="section-label">Scraped Dataset</span>
+          <span id="statusDot" class="status-pill">Loading...</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span id="statDg" class="stat-value">—</span>
+            <span class="stat-label">DarGlobal Docs</span>
+          </div>
+          <div class="stat-card">
+            <span id="statWasalt" class="stat-value">—</span>
+            <span class="stat-label">Wasalt Docs</span>
+          </div>
+        </div>
+        <p id="statMeta" class="helper-text">Indexing scraped pages...</p>
+        <button id="openKbBtn" class="btn-secondary full-width">
+          Explore Scraped Data
+        </button>
+      </div>
+
+      <div id="apiKeySection" class="sidebar-section hidden">
+        <label for="apiKeyInput" class="section-label">OpenRouter API Key</label>
+        <input
+          id="apiKeyInput"
+          type="password"
+          class="text-input"
+          placeholder="sk-or-v1-..."
+          autocomplete="off"
+        />
+        <p class="helper-text">
+          Server key not set. Paste a free key from
+          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener">openrouter.ai/keys</a>
+          (kept in browser session only).
+        </p>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>RAG Powered &bull; FastAPI &bull; Docker</span>
+      </div>
+    </aside>
+
+    <!-- Main Chat Panel -->
+    <main class="chat-main">
+      <header class="topbar">
+        <button id="openSidebarBtn" class="icon-btn mobile-only" aria-label="Open menu">&#9776;</button>
+        <div class="topbar-info">
+          <span class="topbar-title">Real Estate Intelligence Chat</span>
+          <span id="activeScopeBadge" class="scope-badge">Searching: DarGlobal + Wasalt</span>
+        </div>
+        <div class="topbar-actions">
+          <a href="/docs" target="_blank" rel="noopener" class="link-pill">API Docs</a>
+        </div>
+      </header>
+
+      <section id="chatContainer" class="chat-container">
+        <!-- Welcome hero -->
+        <div id="welcomeState" class="welcome-state">
+          <div class="welcome-badge">Scraped Public Knowledge &bull; OpenRouter Free LLM</div>
+          <h2 class="welcome-heading">Ask anything about DarGlobal &amp; Wasalt</h2>
+          <p class="welcome-subtext">
+            Explore luxury co-branded developments across Dubai, Saudi Arabia, Oman, Spain &amp; London from
+            <strong>DarGlobal</strong>, or Saudi verified listings, projects, auctions &amp; REGA-licensed services from
+            <strong>Wasalt</strong>.
+          </p>
+
+          <div class="prompt-grid">
+            <button class="prompt-card" data-prompt="What luxury co-branded projects does DarGlobal offer in Dubai, Saudi Arabia, and Oman?">
+              <span class="prompt-tag tag-dg">DarGlobal</span>
+              <span class="prompt-text">What luxury co-branded projects does DarGlobal offer in Dubai, Saudi Arabia, and Oman?</span>
+            </button>
+            <button class="prompt-card" data-prompt="Tell me about AIDA in Oman and Tierra Viva in Marbella by DarGlobal.">
+              <span class="prompt-tag tag-dg">DarGlobal</span>
+              <span class="prompt-text">Tell me about AIDA in Oman and Tierra Viva in Marbella by DarGlobal.</span>
+            </button>
+            <button class="prompt-card" data-prompt="What services does Wasalt provide in Saudi Arabia, including auctions and Wasalt Business?">
+              <span class="prompt-tag tag-ws">Wasalt</span>
+              <span class="prompt-text">What services does Wasalt provide in Saudi Arabia, including auctions and Wasalt Business?</span>
+            </button>
+            <button class="prompt-card" data-prompt="Compare DarGlobal and Wasalt — how are their business models and property offerings different?">
+              <span class="prompt-tag tag-both">Compare</span>
+              <span class="prompt-text">Compare DarGlobal and Wasalt — how are their business models and property offerings different?</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic messages -->
+        <div id="messagesList" class="messages-list"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <form id="chatForm" class="composer">
+          <textarea
+            id="messageInput"
+            rows="1"
+            placeholder="Ask about DarGlobal luxury residences, Wasalt Saudi properties, locations, brands, or services..."
+            required
+          ></textarea>
+          <button id="sendBtn" type="submit" class="send-btn" aria-label="Send message">
+            <span>Send</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+        <p class="composer-note">
+          Responses are grounded in publicly scraped data from DarGlobal &amp; Wasalt with source citations.
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Knowledge Base Explorer Modal -->
+  <div id="kbModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="kbModalTitle">
+    <div class="modal-backdrop" id="kbModalBackdrop"></div>
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div>
+          <h3 id="kbModalTitle">Scraped Knowledge Base</h3>
+          <p id="kbModalSubtitle" class="helper-text">Collected public pages from DarGlobal &amp; Wasalt</p>
+        </div>
+        <button id="closeKbBtn" class="icon-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-toolbar">
+        <input id="kbSearchInput" type="search" class="text-input" placeholder="Filter documents by title, city, brand..." />
+        <div class="source-tabs compact">
+          <button class="kb-filter active" data-kb-source="all">All</button>
+          <button class="kb-filter" data-kb-source="darglobal">DarGlobal</button>
+          <button class="kb-filter" data-kb-source="wasalt">Wasalt</button>
+        </div>
+      </div>
+      <div id="kbDocsList" class="kb-docs-list"></div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
