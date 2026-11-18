@@ -49,18 +49,18 @@ uv pip install -r requirements-scraper.txt
 python -m app.scraper.run_scraper
 ```
 
-## Deploying to Hugging Face Spaces (Free Docker Hosting)
+## Deploying with Docker (Free Hosting Options)
 
-1. Create a new Space on [Hugging Face Spaces](https://huggingface.co/new-space) and select **Docker** as the SDK (Blank template).
-2. In the Space **Settings → Variables and secrets**, add a **New secret**:
-   - Name: `OPENROUTER_API_KEY`
-   - Value: your free OpenRouter API key (`sk-or-v1-...`)
-3. Push this repository to your Hugging Face Space:
-   ```bash
-   git remote add hf https://huggingface.co/spaces/<your-username>/<your-space-name>
-   git push hf main
-   ```
-4. Hugging Face automatically builds the `Dockerfile` and exposes your live chatbot at `https://<your-username>-<your-space-name>.hf.space`.
+### Option 1: Render (Recommended — Free, No Credit Card)
+1. Push this repository to GitHub.
+2. Go to [Render](https://dashboard.render.com) → **New + → Blueprint** (uses `render.yaml`) or **New + → Web Service** and select your repo.
+3. Choose **Docker** runtime and the **Free** plan.
+4. Add environment variable:
+   - `OPENROUTER_API_KEY` = your free OpenRouter API key (`sk-or-v1-...` from [openrouter.ai/keys](https://openrouter.ai/keys))
+5. Deploy — Render builds the `Dockerfile` and exposes your live public URL (`https://<service-name>.onrender.com`).
+
+### Option 2: Railway / Back4App Containers / Google Cloud Run
+Because `Dockerfile` reads `${PORT:-7860}` automatically, the same container deploys out-of-the-box on **Railway**, **Back4App Containers**, or **Google Cloud Run** by setting `OPENROUTER_API_KEY`.
 
 ## API Endpoints
 

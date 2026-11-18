@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: darglobal-wasalt-chatbot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: openrouter/free
+      - key: APP_PUBLIC_URL
+        value: https://darglobal-wasalt-chatbot.onrender.com
