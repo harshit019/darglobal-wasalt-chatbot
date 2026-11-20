@@ -49,18 +49,8 @@ uv pip install -r requirements-scraper.txt
 python -m app.scraper.run_scraper
 ```
 
-## Deploying with Docker (Free Hosting Options)
-
-### Option 1: Render (Recommended — Free, No Credit Card)
-1. Push this repository to GitHub.
-2. Go to [Render](https://dashboard.render.com) → **New + → Blueprint** (uses `render.yaml`) or **New + → Web Service** and select your repo.
-3. Choose **Docker** runtime and the **Free** plan.
-4. Add environment variable:
-   - `OPENROUTER_API_KEY` = your free OpenRouter API key (`sk-or-v1-...` from [openrouter.ai/keys](https://openrouter.ai/keys))
-5. Deploy — Render builds the `Dockerfile` and exposes your live public URL (`https://<service-name>.onrender.com`).
-
-### Option 2: Railway / Back4App Containers / Google Cloud Run
-Because `Dockerfile` reads `${PORT:-7860}` automatically, the same container deploys out-of-the-box on **Railway**, **Back4App Containers**, or **Google Cloud Run** by setting `OPENROUTER_API_KEY`.
+## Deployed with Docker (Render)
+URL: https://darglobal-wasalt-chatbot-j8rk.onrender.com/
 
 ## API Endpoints
 
